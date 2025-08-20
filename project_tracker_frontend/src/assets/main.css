@@ -1,0 +1,273 @@
+@import 'tailwindcss';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* ---- Variables ---- */
+:root {
+  --color-primary: #00bfff;   /* celeste (botón) */
+  --color-secondary: #000000; /* negro (texto) */
+  --title-bg-1: #e9f7ff;
+  --title-bg-2: #ffffff;
+}
+
+/* ---- Reset global ---- */
+body {
+  color: var(--color-secondary);
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f6f7f9;
+}
+
+/* -------------------
+   Banner oscuro con estrellas fugaces
+------------------- */
+.title-container {
+  position: relative;
+  overflow: hidden;
+  margin: 20px;          /* quitar cualquier margen */
+  padding: 10px;         /* quitar cualquier padding */
+  width: 100vw;       /* ancho total de la ventana */
+ 
+}
+
+/* capa de fondo oscura SOLO para el banner (esto es full-width ya que usas -mx-4) */
+.title-container .bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #02030a; /* negro muy oscuro con matiz azulado */
+  opacity: 1;
+}
+
+/* stars: pseudo elementos animados (fugaces blancas) */
+.title-container .stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* pseudo-elements con box-shadow de puntos y animación */
+.title-container .stars::before,
+.title-container .stars::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  transform-origin: top left;
+}
+
+/* capa rapida */
+.title-container .stars::before {
+  box-shadow:
+    20px 40px #fff,
+    60px 120px #fff,
+    120px 80px #fff,
+    180px 30px #fff,
+    250px 100px #fff,
+    300px 50px #fff,
+    400px 150px #fff;
+  animation: shooting 3s linear infinite;
+  opacity: 0.95;
+}
+
+/* capa lenta (más dispersa) */
+.title-container .stars::after {
+  box-shadow:
+    10px 20px #fff,
+    50px 60px #fff,
+    100px 150px #fff,
+    200px 40px #fff,
+    350px 120px #fff;
+  animation: shooting-slow 4.2s linear infinite;
+  opacity: 0.75;
+}
+
+@keyframes shooting {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(150px) translateX(80px) scale(0.45);
+    opacity: 0;
+  }
+}
+
+@keyframes shooting-slow {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(90px) translateX(40px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* H1 del banner en blanco y con sombra para legibilidad */
+.title-container h1 {
+  color: #ffffff !important;
+  z-index: 20;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.55);
+}
+
+/* -------------------
+   Robot styles & animations
+------------------- */
+.robot-head {
+  background: linear-gradient(180deg,#e6f3ff,#cfeeff);
+  border: 2px solid rgba(0,0,0,0.06);
+  z-index: 5;
+}
+
+/* eyes */
+.robot-eye {
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 999px;
+  position: absolute;
+  top: 22%;
+}
+.left-eye { left: 26%; }
+.right-eye { right: 26%; }
+
+/* body (ajustado margin-top más pequeño para acercar cabeza) */
+.robot-body {
+  background: linear-gradient(180deg,#d9f0ff,#bfe9ff);
+  border: 2px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 6px; /* pequeño ajuste visual extra si hace falta */
+}
+
+/* arms */
+.robot-arm {
+  width: 14px;
+  height: 60px;
+  background: linear-gradient(180deg,#9fd9ff,#66c2ff);
+  border-radius: 8px;
+  position: absolute;
+  top: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transform-origin: top center;
+}
+.robot-arm-left { left: -18px; border-top-left-radius: 8px; }
+.robot-arm-right { right: -18px; border-top-right-radius: 8px; }
+
+/* wave animations */
+@keyframes wave-hand {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(25deg); }
+  40% { transform: rotate(-18deg); }
+  60% { transform: rotate(20deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes wave-hand-reverse {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(-20deg); }
+  40% { transform: rotate(15deg); }
+  60% { transform: rotate(-14deg); }
+  100% { transform: rotate(0deg); }
+}
+.animate-wave-hand { animation: wave-hand 2.2s ease-in-out infinite; transform-origin: top center; }
+.animate-wave-hand-reverse { animation: wave-hand-reverse 2.2s ease-in-out infinite; transform-origin: top center; }
+
+/* -------------------
+   Dialogue / button / menu styles
+------------------- */
+/* diálogo por defecto oculto y desplazado (entrará con clase .enter) */
+.robot-dialog {
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity .22s ease, transform .28s cubic-bezier(.2,.9,.3,1);
+  position: relative; /* necesario para la flecha pseudo-elemento */
+}
+
+/* estado cuando entra */
+.robot-dialog.enter {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* flecha que apunta al robot (triángulo blanco a la izquierda) */
+.robot-dialog::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 28px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 12px solid #fff; /* mismo color que el diálogo */
+  filter: drop-shadow(-2px 2px 2px rgba(0,0,0,0.06));
+  transform: translateX(-2px);
+}
+
+/* typewriter caret blink */
+.typewriter {
+  border-right: 2px solid var(--color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  padding-right: 6px;
+}
+
+/* primary button */
+.btn-create {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+.btn-create:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/* menu buttons */
+.menu-btn {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .12s ease, background-color .12s ease, color .12s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  border-radius: 8px;
+}
+.menu-btn:hover {
+  transform: translateY(-4px);
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/* small screens: stack buttons vertically */
+@media (max-width: 768px) {
+  .menu-btn { height: auto; padding: 12px; }
+  .robot { margin-bottom: 0.6rem; }
+  .robot-dialog { width: 100%; left: 0; }
+}
