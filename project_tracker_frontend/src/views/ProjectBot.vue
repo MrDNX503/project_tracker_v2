@@ -24,7 +24,7 @@ const router = useRouter();
 const submitProject = async () => {
   if (!projectName.value) return;
   try {
-    await axios.post('http://localhost:8000/api/test-projects', {
+    await axios.get('http://localhost:8000/api/test-projects', {
       name: projectName.value,
       description: 'Creado desde el Robot',
     });

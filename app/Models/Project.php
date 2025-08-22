@@ -14,9 +14,6 @@ class Project extends Model
         'description',
         'start_date',
         'end_date',
-        'status',
-        'progress',
-        'user_id', // 🔑 importante
     ];
 
     public function tasks()
